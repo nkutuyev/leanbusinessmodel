@@ -1,0 +1,60 @@
+@(requestUser: models.LeanSocialUser, dataSeq: Seq[play.api.libs.json.JsValue])
+
+@main(title = "Home", leanUser = requestUser) {
+	<script type="text/template" id="community-container-template">
+
+	  <div class="control-panel">
+		<div  class="page-header">
+			<ol class="breadcrumb">
+  				<li><a href="/home">Home</a></li>
+  				<li class="active">My Community</li>
+			</ol>
+		</div>
+	  </div>
+	  <div class="community-data-container">
+
+	  </div>
+	</script>
+	
+	<script type="text/template" id="community-table-template">
+		<table class="footable table-striped" data-page-size="25">
+		  <thead>
+		    <tr>
+		      <th data-sort-initial="true">Member Name</th>
+		      <th data-hide="phone">Email</th>
+		      <th data-hide="phone" data-sort-ignore="true">Shared With Member</th>
+		      <th data-hide="phone" data-sort-ignore="true">Shared By Member</th>
+		    </tr>
+		  </thead>
+		  <tbody>
+			@dataSeq.map{ item =>
+			  <tr>
+			      	<td>@((item \ "name").as[String])</td>
+					<td>@((item \ "email").as[String])</td>
+					<td>
+						@defining((item \ "sharedWith").as[Array[String]]) { sharedWithList =>
+							@for(item <- sharedWithList){
+								<p> @item </p>
+							}
+						}
+					</td>
+					<td>
+						@{
+							val sharedWithList = (item \ "sharedBy").as[Array[String]]
+							for(item <- sharedWithList){
+								<p> @item </p>
+							}
+						}
+					</td>
+			    </tr>
+			}
+		  </tbody>
+		</table>
+	</script>
+	
+	<link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("css/footable.core.css")"></link>
+	
+	<script type="text/javascript" src="@routes.Assets.at("javascript/footable.all.min.js")"></script>
+	<script type="text/javascript" src="@routes.Assets.at("javascript/community.js")"></script>
+
+}

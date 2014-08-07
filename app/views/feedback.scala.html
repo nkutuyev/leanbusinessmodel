@@ -1,0 +1,50 @@
+@(leanUser: models.LeanSocialUser, dataSeq: Seq[play.api.libs.json.JsValue]) 
+
+@main(title = "User Feedback", leanUser) {
+	<link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("css/footable.core.css")"></link>
+	
+	<script type="text/template" id="feedback-container-template">
+
+	  <div class="control-panel">
+		<div  class="page-header">
+			<ol class="breadcrumb">
+  				<li><a href="/home">Home</a></li>
+  				<li class="active">User Feedback</li>
+			</ol>
+		</div>
+	  </div>
+	  <div class="feedback-data-container">
+
+	  </div>
+	</script>
+	
+	<script type="text/template" id="feedback-table-template">
+		<table class="footable table-striped" data-page-size="25">
+		  <thead>
+		    <tr>
+		      <th data-sort-ignore="true">Feedback Content</th>
+		      <th data-hide="phone">User</th>
+		      <th data-hide="phone" data-sort-initial="descending">Date</th>
+		      <th data-hide="phone,tablet">URL</th>
+		    </tr>
+		  </thead>
+		  <tbody>
+			@dataSeq.map{ item =>
+				<tr>
+			      	<td>@((item \ "feedback").as[String])</td>
+					<td>@((item \ "userId").as[String])</td>
+					<td>@((item \ "dateSubmitted").as[String])</td>
+					<td>@((item \ "url").as[String])</td>
+			    </tr>
+			}
+	
+		  </tbody>
+		</table>
+	</script>
+
+	
+	<script type="text/javascript" src="@routes.Assets.at("javascript/footable.all.min.js")"></script>
+
+	<script type="text/javascript" src="@routes.Assets.at("javascript/feedback.js")"></script>
+
+}

@@ -1,0 +1,246 @@
+@(modelCollection: String, leanUser: models.LeanSocialUser) 
+
+@main(title = "Business Model Canvas", leanUser) {
+	
+	<script type="text/template" id="share-model-template">
+	<!--  Share model modal -->
+	<div id="share-model-modal" class="modal fade" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+	  <div class="modal-dialog modal-sm">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h4 class="modal-title" id="modalLabel">Share Business Model</h4>
+	      </div>
+		  <div class="modal-body">
+			   <input type="email" class="form-control" name="email" placeholder="Enter Memeber's Email address"></input>
+		  </div>
+		  <div class="modal-footer">
+			   <button id="cancel-button" type="button" class="btn btn-default">Cancel</button>
+			   <button id="share-button" type="button" class="btn btn-success">Send Invitation</button>
+		   </div>
+	    </div><!-- /.modal-content -->
+	  </div><!-- /.modal-dialog -->
+	</div>
+	</script>
+	
+	
+	<script type="text/template" id="model-cotainer-template">
+
+	<div class="control-panel">
+		<div  class="page-header">
+			<ol class="breadcrumb">
+  				<li><a href="/home">Home</a></li>
+  				<li class="active">Business Models</li>
+			</ol>
+		</div>
+		<button id="create-button" class="btn btn-success"><span class="glyphicon glyphicon-plus"></span>  Create New Model</button>
+		<div id="alert-panel" class="alert alert-danger hidden">
+			<a id="alert-remove" href="" class="alert-success"><span class="glyphicon glyphicon-remove"></span> </a>
+		</div>
+	</div>
+	<div class="canvas-container">
+
+	</div>
+	</script>
+
+	<script type="text/template" id="model-template">
+		<ul class="list-group">
+		  <li id="model-title" class="list-group-item">
+		  	<a id="model-name" class="glyphicon glyphicon-edit"><span class="model-name">{{name}}<span></a>
+			<span class="pull-right">
+				<a id="share-icon" class="glyphicon glyphicon-share"></a>
+				<span id="trash" class="glyphicon glyphicon-trash"></span>
+			</span>
+		  </li>
+		  <li class="list-group-item">Version: {{version}}</li>
+		  <li class="list-group-item">Created By: {{createdBy}}</li>
+		  <li class="list-group-item">Created On: {{dateCreated}}</li>
+		  <li class="list-group-item">Last updated: {{lastUpdated}}</li>
+		</ul>
+	</script>
+
+	<script type="text/template" id="version-selector-template">
+		<select class="form-control pull-left">	</select>
+	</script>
+
+	<script type="text/template" id="canvas-container-template">
+		<div class="page-header">
+			<ol class="breadcrumb">
+  				<li><a href="/home">Home</a></li>
+  				<li><a href="/model/view">Business Models</a></li>
+				<li class="active">Model Canvas</li>
+			</ol>
+		</div>
+
+	<div id="alert-panel" class="alert alert-danger hidden">
+		<a id="alert-remove" href="" class="alert-success"><span class="glyphicon glyphicon-remove"></span> </a>
+	</div>
+
+	<div id="canvas-container" class="panel panel-info">
+  		<div id="canvas-title" class="panel-heading">
+			<div class="row">
+			<div class="col-sm-3 hover-content">
+				<p class="pull-left" id="name" data-pk="1">{{name}}</p>
+			</div>
+			<div id="version-selector" class="col-sm-3">
+				
+			</div>
+			<div id="set-version" class="col-sm-2">
+				<button id="set-current-version" type="button" class="btn btn-success">
+					<span class="glyphicon glyphicon-check"></span>
+				</button>
+			</div>
+			<div id="toolbar" class="col-sm-4">
+				<button id="new-version-button" type="button" class="btn btn-success pull-right">
+  					<span class="glyphicon glyphicon-floppy-save"></span> Create New Version
+				</button>
+				<span id="version-field" class="pull-right"> </span>
+				<button id="print-button" type="button" class="btn btn-success menu-button pull-right">
+  					<span class="glyphicon glyphicon-print"></span>
+				</button>
+				<button id="slider-button" type="button" class="btn btn-success menu-button pull-right">
+  					<span class="glyphicon glyphicon-film"></span>
+				</button>
+				<button id="share-modal-button" type="button" class="btn btn-success menu-button pull-right">
+  					<span class="glyphicon glyphicon-share"></span>
+				</button>
+			</div>
+			</div>
+		</div>
+  		<div class="panel-body">
+		<div class="tCanvas">
+		<div class="col-small" data-nested=".level-1">
+			<div class="brick level-1 col15 no-bottom">
+				<div class="canvas-field">
+					<h3>1. Problem</h3>
+					<span class="hover-content" id="problem" data-pk="1">{{problem}}</span>
+				</div>
+			</div>
+			<div class="brick level-1 col15 no-top">
+				<div class="canvas-field">
+					<h4>Existing Alternatives</h4>
+					<span class="hover-content" id="existingAlternatives" data-pk="1">{{existingAlternatives}}</span>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-small" data-nested=".level-1">
+			<div class="brick level-1 col15">
+				<div class="canvas-field">
+					<h3>4. Solution</h3>
+					<span class="hover-content" id="solution" data-pk="1">{{solution}}</span>
+				</div>
+			</div>
+			<div class="brick level-1 col15 topBorder">
+				<div class="canvas-field">
+					<h3>8. Key Metrics</h3>
+					<span class="hover-content" id="keyMetrics" data-pk="1">{{keyMetrics}}</span>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-small" data-nested=".level-1">
+			<div class="brick level-1 col15 no-bottom">
+				<div class="canvas-field">
+					<h3>3. Value Proposition</h3>
+					<span class="hover-content" id="valueProposition" data-pk="1">{{valueProposition}}</span>
+				</div>
+			</div>
+			<div class="brick level-1 col15 no-top">
+				<div class="canvas-field">
+					<h4>High-level Concept</h4>
+					<span class="hover-content" id="highLevelConcept" data-pk="1">{{highLevelConcept}}</span>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-small" data-nested=".level-1">
+			<div class="brick level-1 col15">
+				<div class="canvas-field">
+					<h3>5. Unfair Advantage</h3>
+					<span class="hover-content" id="unfairAdvantage" data-pk="1">{{unfairAdvantage}}</span>
+				</div>
+			</div>
+			<div class="brick level-1 col15">
+				<div class="canvas-field">
+					<h3>9. Channels</h3>
+					<span class="hover-content" id="channels" data-pk="1">{{channels}}</span>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-small" data-nested=".level-1" >
+			<div class="brick level-1 col15 no-bottom">
+				<div class="canvas-field">
+					<h3>2. Customer Segments</h3>
+					<span class="hover-content" id="customerSegments" data-pk="1">{{customerSegments}}</span>
+				</div>
+			</div>
+			<div class="brick level-1 col15 no-top">
+				<div class="canvas-field">
+					<h4>Early Adopters</h4>
+					<span class="hover-content" id="earlyAdopters" data-pk="1">{{earlyAdopters}}</span>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="bCanvas">
+		<div class="col-wide" data-nested=".level-1">
+			<div class="brick level-1 col11">
+				<div class="canvas-field">
+					<h3>7. Cost Structure</h3>
+					<span class="hover-content" id="costStructure" data-pk="1">{{costStructure}}</span>
+				</div>
+			</div>
+		</div>
+		<div class="col-wide" data-nested=".level-1">
+			<div class="brick level-1 col11">
+				<div class="canvas-field">
+					<h3>6. Revenue Streams</h3>
+					<span class="hover-content" id="revenueStreams" data-pk="1">{{revenueStreams}}</span>
+				</div>
+			</div>
+		</div>
+	</div>
+	</div>
+	<div class="panel-footer">
+		<small>Lean Canvas is adapted from The Business Model Canvas (BusinessModelGeneration.com) and is licensed under the <a href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-Share Alike 3.0 Un-ported License</a>.</small>
+	</div>
+	</div>
+	</script>
+
+	<script type="text/javascript">
+		var modelString = @Html(modelCollection);
+	</script>
+	
+	<script type="text/template" id="slide-template">
+		<div class="panel panel-info">
+  				<div class="panel-heading">
+    				<h2><strong>{{title}}</strong></h2>
+  				</div>
+  				<div class="panel-body"><h3>{{content}}</h3></div>
+		</div>
+	</script>
+	
+	<script type="text/template" id="slider-template">
+		<div class="page-header">
+			<ol class="breadcrumb">
+  				<li><a href="/home">Home</a></li>
+  				<li><a href="/model/view">Business Models</a></li>
+				<li><a href="/model/view#model/{{id}}">Model Canvas</a></li>
+				<li class="active">Model Presentation</li>
+			</ol>
+		</div>
+
+		<div id="alert-panel" class="alert alert-danger hidden"></div>
+		<div class="slider">
+
+		</div>
+	</script>
+	
+	<script type="text/javascript" src="@routes.Assets.at("javascript/anyslider.min.js")"></script>
+	<script type="text/javascript" src="@routes.Assets.at("javascript/PrintArea.js")"></script>
+
+	<script type="text/javascript" src="@routes.Assets.at("javascript/modellist.js")"></script>
+
+}

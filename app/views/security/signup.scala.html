@@ -1,0 +1,47 @@
+@(signUpForm: Form[securesocial.controllers.Registration.RegistrationInfo], token: String)(implicit request: RequestHeader)
+
+@import helper._
+@implicitFieldConstructor = @{ FieldConstructor(views.html.inputFieldConstructor.f) }
+
+@main(title = "Sugn Up", leanUser= null) {
+	
+<div class="panel panel-success" id="signup-panel">
+	<div class="panel-heading">
+		<h3 class="panel-title">Your email account was verified. Submit the form to complete registration process.</h3>
+	</div>
+    @request.flash.get("error").map { msg =>
+       <div class="alert alert-error">
+           @msg
+       </div>
+    }
+	<div class="panel-body">
+		<form class="form-horizontal" role="form" action="/signup/@token" method="POST" autocomplete= "off">
+			<fieldset>
+				@helper.inputText(
+	                signUpForm("firstName"),
+	                'class -> "form-control",
+	                'placeholder -> "First Name"
+	            )
+				@helper.inputText(
+	                signUpForm("lastName"),
+	                'class -> "form-control",
+	                'placeholder -> "Last Name"
+	            )
+				@helper.inputPassword(
+	                signUpForm("password.password1"),
+	                'class -> "form-control",
+	                'placeholder -> "Password"
+	            )
+				@helper.inputPassword(
+	                signUpForm("password.password2"),
+	                '_error -> signUpForm.error("password"),
+	                'class -> "form-control",
+	                'placeholder -> "Confirm Password"
+	            )
+				<button type="submit" class="btn btn-success">Complete Registration</button>
+			</fieldset>
+		</form>
+	</div>
+</div>
+}
+
